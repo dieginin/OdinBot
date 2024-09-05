@@ -40,7 +40,7 @@ class BrawlApi:
 
         if response:
             return Player.from_dict(response)
-        raise Exception(f"Tag #{tag} no encontrada")
+        raise Exception("Tag no encontrada")
 
     def get_player_battlelog(self, tag: str) -> list[BattleLog]:
         url = PLYR_BASE_URL + parse_tag(tag) + "/battlelog"
