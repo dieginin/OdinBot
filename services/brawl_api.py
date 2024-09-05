@@ -1,12 +1,12 @@
 import requests
 
 from config import BS_KEY
-from models import BattleLog, Club, Member, Player
+from models import BattleLog, Brawler, Club, Member, Player
 
 __BASE_URL = "https://bsproxy.royaleapi.dev/v1/"
 CLUB_BASE_URL = __BASE_URL + "clubs/%23"
 PLYR_BASE_URL = __BASE_URL + "players/%23"
-
+BWRS_BASE_URL = __BASE_URL + "brawlers/"
 parse_tag = lambda tag: tag.strip("#").strip().upper()
 
 
@@ -46,5 +46,13 @@ class BrawlApi:
         response = make_request(url)
 
         if response:
-            return [BattleLog.from_dict(m) for m in response["items"]]
+            return [BattleLog.from_dict(bl) for bl in response["items"]]
         raise Exception("Tag no encontrada")
+
+    def get_brawlers(self) -> list[Brawler]:
+        url = BWRS_BASE_URL
+        response = make_request(url)
+
+        if response:
+            return [Brawler.from_dict(b) for b in response["items"]]
+        raise Exception("Error en petición")
