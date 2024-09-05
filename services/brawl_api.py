@@ -20,26 +20,26 @@ class BrawlApi:
     def get_club(self, tag: str) -> Club:
         tag = parse_tag(tag)
         url = CLUB_BASE_URL + tag
-        request = make_request(url)
+        response = make_request(url)
 
-        if request:
-            return Club.from_dict(request)
+        if response:
+            return Club.from_dict(response)
         raise Exception(f"Tag #{tag} no encontrada")
 
     def get_club_members(self, tag: str) -> list[Member]:
         tag = parse_tag(tag)
         url = CLUB_BASE_URL + tag + "/members"
-        request = make_request(url)
+        response = make_request(url)
 
-        if request:
-            return [Member.from_dict(m) for m in request["items"]]
+        if response:
+            return [Member.from_dict(m) for m in response["items"]]
         raise Exception(f"Tag #{tag} no encontrada")
 
     def get_player(self, tag: str) -> Player:
         tag = parse_tag(tag)
         url = PLYR_BASE_URL + tag
-        request = make_request(url)
+        response = make_request(url)
 
-        if request:
-            return Player.from_dict(request)
+        if response:
+            return Player.from_dict(response)
         raise Exception(f"Tag #{tag} no encontrada")
