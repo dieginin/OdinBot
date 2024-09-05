@@ -7,6 +7,7 @@ __BASE_URL = "https://bsproxy.royaleapi.dev/v1/"
 CLUB_BASE_URL = __BASE_URL + "clubs/%23"
 PLYR_BASE_URL = __BASE_URL + "players/%23"
 BWRS_BASE_URL = __BASE_URL + "brawlers/"
+
 parse_tag = lambda tag: tag.strip("#").strip().upper()
 
 
@@ -56,3 +57,11 @@ class BrawlApi:
         if response:
             return [Brawler.from_dict(b) for b in response["items"]]
         raise Exception("Error en petición")
+
+    def get_brawler_by_id(self, id: int) -> Brawler:
+        url = BWRS_BASE_URL + str(id)
+        response = make_request(url)
+
+        if response:
+            return Brawler.from_dict(response)
+        raise Exception("ID no encontrada")
