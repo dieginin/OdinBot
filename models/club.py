@@ -3,7 +3,7 @@ class Club:
         self.tag = tag
         self.name = name
 
-    def to_dict(self) -> dict[str, str]:
+    def to_dict(self) -> dict:
         return {"tag": self.tag, "name": self.name}
 
     @staticmethod
