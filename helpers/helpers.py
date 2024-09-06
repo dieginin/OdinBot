@@ -47,5 +47,4 @@ def to_enum[EnumT: Enum](c: Type[EnumT], x: Any) -> EnumT:
 
 
 def to_response[T](cls: Type[T], response: Optional[Any]) -> Optional[T]:
-    assert isinstance(response, dict)
     return cast(Any, cls).from_dict(response) if response else None
