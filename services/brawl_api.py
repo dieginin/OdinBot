@@ -1,6 +1,7 @@
 import requests
 
 from config import BS_KEY
+from helpers import from_list, to_response
 from models import BattleLog, Brawler, Club, Member, Player
 
 __BASE_URL = "https://bsproxy.royaleapi.dev/v1/"
@@ -18,50 +19,29 @@ def make_request(url: str) -> dict | None:
 
 
 class BrawlApi:
-    def get_club(self, tag: str) -> Club:
+    def get_club(self, tag: str) -> Club | None:
         url = CLUB_BASE_URL + parse_tag(tag)
-        response = make_request(url)
+        return to_response(Club, make_request(url))
 
-        if response:
-            return Club.from_dict(response)
-        raise Exception("Tag no encontrada")
-
-    def get_club_members(self, tag: str) -> list[Member]:
+    def get_club_members(self, tag: str) -> list[Member] | None:
         url = CLUB_BASE_URL + parse_tag(tag) + "/members"
-        response = make_request(url)
+        res = make_request(url)
+        return from_list(Member.from_dict, res["items"]) if res else None
 
-        if response:
-            return [Member.from_dict(m) for m in response["items"]]
-        raise Exception("Tag no encontrada")
-
-    def get_player(self, tag: str) -> Player:
+    def get_player(self, tag: str) -> Player | None:
         url = PLYR_BASE_URL + parse_tag(tag)
-        response = make_request(url)
+        return to_response(Player, make_request(url))
 
-        if response:
-            return Player.from_dict(response)
-        raise Exception("Tag no encontrada")
-
-    def get_player_battlelog(self, tag: str) -> list[BattleLog]:
+    def get_player_battlelog(self, tag: str) -> list[BattleLog] | None:
         url = PLYR_BASE_URL + parse_tag(tag) + "/battlelog"
-        response = make_request(url)
+        res = make_request(url)
+        return from_list(BattleLog.from_dict, res["items"]) if res else None
 
-        if response:
-            return [BattleLog.from_dict(bl) for bl in response["items"]]
-        raise Exception("Tag no encontrada")
-
-    def get_brawlers(self) -> list[Brawler]:
+    def get_brawlers(self) -> list[Brawler] | None:
         url = BWRS_BASE_URL
-        response = make_request(url)
+        res = make_request(url)
+        return from_list(Brawler.from_dict, res["items"]) if res else None
 
-        if response:
-            return [Brawler.from_dict(b) for b in response["items"]]
-        raise Exception("Error en petición")
-
-    def get_brawler_by_id(self, id: int) -> Brawler:
+    def get_brawler_by_id(self, id: int) -> Brawler | None:
         url = BWRS_BASE_URL + str(id)
-        response = make_request(url)
-
-        if response:
-            return Brawler.from_dict(response)
-        raise Exception("ID no encontrada")
+        return to_response(Brawler, make_request(url))
