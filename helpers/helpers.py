@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Callable, Type, cast
+from typing import Any, Callable, Optional, Type, cast
 
 
 def from_bool(x: Any) -> bool:
@@ -44,3 +44,8 @@ def to_class[T](c: Type[T], x: Any) -> dict:
 def to_enum[EnumT: Enum](c: Type[EnumT], x: Any) -> EnumT:
     assert isinstance(x, c)
     return x.value
+
+
+def to_response[T](cls: Type[T], response: Optional[Any]) -> Optional[T]:
+    assert isinstance(response, dict)
+    return cast(Any, cls).from_dict(response) if response else None
