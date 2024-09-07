@@ -6,6 +6,5 @@ from .helpers import (
     from_str,
     from_union,
     to_class,
-    to_enum,
     to_response,
 )

@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import Any, Callable, Optional, Type, cast
 
 
@@ -39,11 +38,6 @@ def from_union(fs, x) -> Any:
 def to_class[T](c: Type[T], x: Any) -> dict:
     assert isinstance(x, c)
     return cast(Any, x).to_dict()
-
-
-def to_enum[EnumT: Enum](c: Type[EnumT], x: Any) -> EnumT:
-    assert isinstance(x, c)
-    return x.value
 
 
 def to_response[T](cls: Type[T], response: Optional[Any]) -> Optional[T]:
