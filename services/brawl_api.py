@@ -23,10 +23,28 @@ class BrawlApi:
         url = CLUB_BASE_URL + parse_tag(tag)
         return to_response(Club, make_request(url))
 
+    def get_members_from_clubs(self, clubs_tags: list[str]) -> list[Member] | None:
+        all_members = [
+            member
+            for tag in clubs_tags
+            for member in (self.get_club_members(tag) or [])
+        ]
+        return (
+            sorted(all_members, key=lambda member: member.trophies, reverse=True)
+            or None
+        )
+
     def get_club_members(self, tag: str) -> list[Member] | None:
         url = CLUB_BASE_URL + parse_tag(tag) + "/members"
         res = make_request(url)
-        return from_list(Member.from_dict, res["items"]) if res else None
+        if res:
+            for member in res["items"]:
+                member["club_tag"] = f"#{tag}"
+            return sorted(
+                from_list(Member.from_dict, res["items"]),
+                key=lambda member: member.trophies,
+                reverse=True,
+            )
 
     def get_player(self, tag: str) -> Player | None:
         url = PLYR_BASE_URL + parse_tag(tag)
