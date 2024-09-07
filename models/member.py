@@ -1,15 +1,6 @@
-from enum import Enum
-
-from helpers import from_int, from_str, to_class, to_enum
+from helpers import from_int, from_str, to_class
 
 from .icon import Icon
-
-
-class Role(Enum):
-    MEMBER = "member"
-    PRESIDENT = "president"
-    SENIOR = "senior"
-    VICE_PRESIDENT = "vicePresident"
 
 
 class Member:
@@ -17,34 +8,34 @@ class Member:
         self,
         tag: str,
         name: str,
-        name_color: str,
-        role: Role,
+        club_tag: str,
+        role: str,
         trophies: int,
         icon: Icon,
     ) -> None:
         self.tag = tag
         self.name = name
-        self.name_color = name_color
         self.role = role
         self.trophies = trophies
         self.icon = icon
+        self.club_tag = club_tag
 
     @staticmethod
     def from_dict(obj: dict) -> "Member":
         tag = from_str(obj.get("tag"))
         name = from_str(obj.get("name"))
-        name_color = from_str(obj.get("nameColor"))
-        role = Role(obj.get("role"))
+        club_tag = from_str(obj.get("club_tag"))
+        role = from_str(obj.get("role"))
         trophies = from_int(obj.get("trophies"))
         icon = Icon.from_dict(obj.get("icon", {}))
-        return Member(tag, name, name_color, role, trophies, icon)
+        return Member(tag, name, club_tag, role, trophies, icon)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["tag"] = from_str(self.tag)
         result["name"] = from_str(self.name)
-        result["nameColor"] = from_str(self.name_color)
-        result["role"] = to_enum(Role, self.role)
+        result["club_tag"] = from_str(self.club_tag)
+        result["role"] = from_str(self.role)
         result["trophies"] = from_int(self.trophies)
         result["icon"] = to_class(Icon, self.icon)
         return result
